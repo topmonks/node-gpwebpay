@@ -15,14 +15,24 @@
   "license": "MIT",
   "devDependencies": {
     "@types/jest": "^26.0.8",
+    "@typescript-eslint/eslint-plugin": "^4.23.0",
+    "@typescript-eslint/parser": "^4.23.0",
+    "eslint": "^7.26.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.0",
     "jest": "^26.2.2",
+    "prettier": "^2.3.0",
     "ts-jest": "^26.1.4",
-    "tslint": "^6.1.3",
-    "typescript": "^3.9.7"
+    "typescript": "^3.9.9"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/topmonks/node-gpwebpay.git"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "semi": false,
+    "trailingComma": "none"
   },
   "homepage": "https://github.com/topmonks/node-gpwebpay/blob/main/README.md"
 }

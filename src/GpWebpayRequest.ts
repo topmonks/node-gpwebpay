@@ -1,9 +1,8 @@
-import crypto from 'crypto';
-import fs from 'fs';
+import crypto from 'crypto'
 import { GpWebpayOperation } from './GPWebpay'
 
 enum GpWebpayRequestCurrency {
-  CZK = '203',
+  CZK = '203'
 }
 
 enum GpWebpayRequestPaymentMethod {
@@ -11,44 +10,44 @@ enum GpWebpayRequestPaymentMethod {
   GOOGLE_PAY = 'GPAY',
   CART = 'CRD',
   MASTERPASS = 'MPS',
-  MASTERCARD_MOBILE = 'MCM',
+  MASTERCARD_MOBILE = 'MCM'
 }
 
 class GpWebpayRequest {
-  merchantNumber?: string;
-  operation: GpWebpayOperation;
-  orderNumber: number;
-  amount: number;
-  currency: GpWebpayRequestCurrency;
-  depositFlag: number = 1;
-  merOrderNum?: number;
-  url: string; // redirectUrl
-  description?: string;
-  md?: string;
-  paymentMethod?: GpWebpayRequestPaymentMethod;
-  disabledPaymentMethod?: GpWebpayRequestPaymentMethod;
-  paymentMethods?: [GpWebpayRequestPaymentMethod];
-  email?: string;
-  referenceNumber?: string;
-  addInfo?: string;
-  lang?: string;
-  digest?: string;
+  merchantNumber?: string
+  operation: GpWebpayOperation
+  orderNumber: number
+  amount: number
+  currency: GpWebpayRequestCurrency
+  depositFlag = 1
+  merOrderNum?: number
+  url: string // redirectUrl
+  description?: string
+  md?: string
+  paymentMethod?: GpWebpayRequestPaymentMethod
+  disabledPaymentMethod?: GpWebpayRequestPaymentMethod
+  paymentMethods?: [GpWebpayRequestPaymentMethod]
+  email?: string
+  referenceNumber?: string
+  addInfo?: string
+  lang?: string
+  digest?: string
 
   constructor(
     operation: GpWebpayOperation,
     orderNumber: number,
     amount: number,
     currency: GpWebpayRequestCurrency,
-    url: string,
+    url: string
   ) {
-    this.operation = operation;
-    this.orderNumber = orderNumber;
-    this.amount = amount;
-    this.currency = currency;
-    this.url = url;
+    this.operation = operation
+    this.orderNumber = orderNumber
+    this.amount = amount
+    this.currency = currency
+    this.url = url
   }
 
-  validateProperties() {
+  validateProperties(): void {
     if (!this.merchantNumber) {
       throw new Error('merchantNumber is required.')
     }
@@ -90,67 +89,80 @@ class GpWebpayRequest {
     }
   }
 
-  getPostData() {
+  getPostData(): string {
     const keyMap: Record<string, string> = {
-      'merchantNumber': 'MERCHANTNUMBER',
-      'operation': 'OPERATION',
-      'orderNumber': 'ORDERNUMBER',
-      'amount': 'AMOUNT',
-      'currency': 'CURRENCY',
-      'depositFlag': 'DEPOSITFLAG',
-      'merOrderNum': 'MERORDERNUM',
-      'url': 'URL',
-      'description': 'DESCRIPTION',
-      'md': 'MD',
-      'paymentMethod': 'PAYMETHOD',
-      'disabledPaymentMethod': 'DISABLEPAYMETHOD',
-      'paymentMethods': 'PAYMETHODS',
-      'email': 'EMAIL',
-      'referenceNumber': 'REFERENCENUMBER',
-      'addInfo': 'ADDINFO',
-      'digest': 'DIGEST',
-    };
-    const data = [];
+      merchantNumber: 'MERCHANTNUMBER',
+      operation: 'OPERATION',
+      orderNumber: 'ORDERNUMBER',
+      amount: 'AMOUNT',
+      currency: 'CURRENCY',
+      depositFlag: 'DEPOSITFLAG',
+      merOrderNum: 'MERORDERNUM',
+      url: 'URL',
+      description: 'DESCRIPTION',
+      md: 'MD',
+      paymentMethod: 'PAYMETHOD',
+      disabledPaymentMethod: 'DISABLEPAYMETHOD',
+      paymentMethods: 'PAYMETHODS',
+      email: 'EMAIL',
+      referenceNumber: 'REFERENCENUMBER',
+      addInfo: 'ADDINFO',
+      digest: 'DIGEST'
+    }
+    const data = []
     for (const key of Object.keys(keyMap)) {
       // @ts-ignore
-      const value = this[key];
+      const value = this[key]
       if (value) {
-        data.push(keyMap[key] + '=' + encodeURIComponent(value));
+        data.push(keyMap[key] + '=' + encodeURIComponent(value))
       }
     }
 
-    return data.join('&');
+    return data.join('&')
   }
 
-  getSignatureBase() {
+  getSignatureBase(): string {
     const signKeys = [
-      'merchantNumber', 'operation', 'orderNumber', 'amount', 'currency',
-      'depositFlag', 'merOrderNum', 'url', 'description', 'md',
-      'paymentMethod', 'disabledPaymentMethod', 'paymentMethods',
-      'email', 'referenceNumber', 'addInfo',
-    ];
-    const base = [];
-    const values = Object.values(this);
-    const keys = Object.keys(this);
+      'merchantNumber',
+      'operation',
+      'orderNumber',
+      'amount',
+      'currency',
+      'depositFlag',
+      'merOrderNum',
+      'url',
+      'description',
+      'md',
+      'paymentMethod',
+      'disabledPaymentMethod',
+      'paymentMethods',
+      'email',
+      'referenceNumber',
+      'addInfo'
+    ]
+    const base = []
+    const values = Object.values(this)
+    const keys = Object.keys(this)
     for (const key of signKeys) {
-      const i = keys.indexOf(key);
+      const i = keys.indexOf(key)
       if (i >= 0) {
-        base.push(values[i]);
+        base.push(values[i])
       }
     }
 
-    return base.join('|');
+    return base.join('|')
   }
 
-  sign(privateKey: string, privateKeyPass: string) {
-    const base = this.getSignatureBase();
-    const sign = crypto.createSign('sha1');
-    sign.update(base);
-    this.digest = sign.sign({ key: privateKey, passphrase: privateKeyPass }, 'base64');
+  sign(privateKey: string, privateKeyPass: string): void {
+    const base = this.getSignatureBase()
+    const sign = crypto.createSign('sha1')
+    sign.update(base)
+    this.digest = sign.sign(
+      { key: privateKey, passphrase: privateKeyPass },
+      'base64'
+    )
   }
 }
 
-export default GpWebpayRequest;
-export {
-  GpWebpayRequestCurrency,
-};
+export default GpWebpayRequest
+export { GpWebpayRequestCurrency }
