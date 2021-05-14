@@ -6,6 +6,7 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "tsc",
+    "prepublish": "npm run build",
     "test": "jest",
     "test-dev": "jest --runInBand --watchAll"
   },
@@ -21,7 +22,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Dawast/node-gpwebpay.git"
+    "url": "https://github.com/topmonks/node-gpwebpay.git"
   },
-  "homepage": "https://github.com/Dawast/node-gpwebpay/blob/master/README.md"
+  "homepage": "https://github.com/topmonks/node-gpwebpay/blob/main/README.md"
 }
