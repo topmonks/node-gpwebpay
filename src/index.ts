@@ -1,6 +1,12 @@
 import GpWebpay, { GpWebpayOperation } from './GPWebpay'
 import GpWebpayResponse from './GpWebpayResponse'
-import GpWebpayRequest from './GpWebpayRequest'
+import GpWebpayRequest, { GpWebpayRequestCurrency } from './GpWebpayRequest'
 
 export default GpWebpay
-export { GpWebpayOperation, GpWebpay, GpWebpayResponse, GpWebpayRequest }
+export {
+  GpWebpayRequestCurrency,
+  GpWebpayOperation,
+  GpWebpay,
+  GpWebpayResponse,
+  GpWebpayRequest
+}
