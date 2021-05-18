@@ -34,13 +34,14 @@ class GpWebpayResponse {
   constructor(
     merchantNumber: string,
     data: GpWebpayResponseData,
-    publicKey: string | Record<string, unknown> | Buffer | crypto.KeyObject
+    publicKey: string | Record<string, unknown> | Buffer | crypto.KeyObject,
+    validate = true
   ) {
     this.data = data
     this.merchantNumber = merchantNumber
     this.publicKey = publicKey
 
-    if (!this.validateSignature()) {
+    if (validate && !this.validateSignature()) {
       throw new Error('Response is not valid.')
     }
   }

@@ -57,9 +57,12 @@ class GpWebpay {
     return this.publicKey
   }
 
-  createResponse(data: GpWebpayResponseData): GpWebpayResponse {
+  createResponse(
+    data: GpWebpayResponseData,
+    validate = true
+  ): GpWebpayResponse {
     const publicKey = this.getPublicKey()
-    return new GpWebpayResponse(this.merchantNumber, data, publicKey)
+    return new GpWebpayResponse(this.merchantNumber, data, publicKey, validate)
   }
 }
 
